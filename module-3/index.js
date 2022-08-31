@@ -4,11 +4,14 @@ const cors = require("cors");
 const port = 5000;
 const toolsRoutes = require("./routes/v1/tools.route");
 const { database } = require("./utils/database");
+const viewCount = require("./middleware/viewCount");
 
 app.use(cors());
 app.use(express.json());
 
 database();
+
+// app.use(viewCount);
 
 app.use("/api/v1/tools", toolsRoutes)
 
