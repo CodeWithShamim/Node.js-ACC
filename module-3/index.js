@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const port = 5000;
 const toolsRoutes = require("./routes/v1/tools.route");
-const { database } = require("./utils/database");
+const { connectToServer } = require("./utils/database");
 // const viewCount = require("./middleware/viewCount");
 const errorHandler = require("./middleware/errorHandler");
 
@@ -12,7 +12,17 @@ app.use(express.json());
 // app.use(express.static("views"))
 app.set("view engine", "ejs");
 
-database();
+connectToServer((err) => {
+    if (!err) {
+        app.listen(port, () => {
+            console.log("server is running....");
+        });
+
+    }
+    else {
+        console.log("Error", error);
+    }
+})
 
 // app.use(viewCount);
 
@@ -23,10 +33,6 @@ app.all("*", (req, res) => {
 });
 
 app.use(errorHandler);
-
-app.listen(port, () => {
-    console.log("server is running....");
-});
 
 process.on("unhandledRejection", (error) => {
     console.log(error.name, error.message);
