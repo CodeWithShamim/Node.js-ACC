@@ -15,7 +15,9 @@ mongoose.connect(process.env.DB_LOCAl)
   .then(() => console.log("DB connect success......".red.bold))
   .catch((error) => console.log("Error", error.message))
 
-// schema design 
+// Schema => Model => Query 
+
+// schema 
 const productSchema = mongoose.Schema({
   name: {
     type: String,
@@ -71,23 +73,51 @@ const productSchema = mongoose.Schema({
   //   type: Date,
   //   default: Date.now
   // },
-  supplier: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Supplier"
-  },
-  categories: [{
-    _id: mongoose.Schema.Types.ObjectId,
-    name: {
-      type: String,
-      required: true
-    }
-  }]
+  // supplier: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Supplier"
+  // },
+  // categories: [{
+  //   _id: mongoose.Schema.Types.ObjectId,
+  //   name: {
+  //     type: String,
+  //     required: true
+  //   }
+  // }]
 
 }, { timestamps: true })
+
+// Model 
+const Product = mongoose.model("Product", productSchema);
 
 // route 
 app.get("/", (req, res) => {
   res.send("ok")
+})
+
+// posting to database 
+app.post("/api/v1/product", async (req, res) => {
+  // save a product 
+  try {
+    const data = req.body;
+    const product = new Product(data);
+    if (product.quantity === 0) {
+      product.status = "out-of-stock";
+    }
+    const result = await product.save();
+    // const result = await Product.create(data);
+    res.status(200).json({
+      success: true,
+      message: "product inserted successfully.",
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "data is not inserted.",
+      error: error.message
+    })
+  }
 })
 
 // server
