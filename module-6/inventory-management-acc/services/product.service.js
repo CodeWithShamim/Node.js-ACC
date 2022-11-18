@@ -41,3 +41,48 @@ module.exports.updateProductService = async (productId, data) => {
     const result = await Product.updateOne({ _id: productId }, { $set: data }, { runValidators: true })
     return result;
 }
+
+module.exports.bulkUpdateProductService = async (data) => {
+    /*
+        // json data for this update 
+        {
+            "ids": [
+                "6376320a27615e099803f1e1",
+                "6376321b27615e099803f1e3"
+            ],
+                "data": {
+                "description": "bulk-update2"
+            }
+        }
+    */
+    // const result = await Product.updateMany({ _id: data.ids }, { $set: data.data }, { runValidators: true })
+
+    /*
+         // json data for this update 
+        {
+            "ids": [
+                {
+                    "id": "6376320a27615e099803f1e1",
+                    "data": {
+                        "name": "mobile",
+                        "description": "bulk1 update by promise"
+                    }
+                },
+                {
+                    "id": "6376321b27615e099803f1e3",
+                    "data": {
+                        "name": "T-shirts",
+                        "description": "bulk100 update by promise"
+                    }
+                }
+            ]
+        }
+    */
+
+    const products = []
+    data.ids.forEach(product => {
+        products.push(Product.updateOne({ _id: product.id }, product.data))
+    });
+    const result = await Promise.all(products)
+    return result;
+}

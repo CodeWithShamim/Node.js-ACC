@@ -55,3 +55,22 @@ module.exports.updateProductById = async (req, res) => {
         })
     }
 }
+
+// bulk update product 
+module.exports.bulkUpdateProduct = async (req, res) => {
+    try {
+        const data = req.body;
+        const result = await productService.bulkUpdateProductService(data);
+        res.status(200).json({
+            success: true,
+            message: "Bulk update successfully.",
+            data: result
+        })
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: "data update failed.",
+            error: error.message
+        })
+    }
+}
