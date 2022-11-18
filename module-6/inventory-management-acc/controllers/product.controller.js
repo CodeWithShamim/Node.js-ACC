@@ -93,3 +93,22 @@ module.exports.deleteProductById = async (req, res) => {
         })
     }
 }
+
+// bulk delete product 
+module.exports.bulkDeleteProduct = async (req, res) => {
+    try {
+        const ids = req.body.ids;
+        const result = await productService.bulkDeleteProductService(ids);
+        res.status(200).json({
+            success: true,
+            message: "Bulk delete successfully.",
+            data: result
+        })
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: "bulk delete failed.",
+            error: error.message
+        })
+    }
+}
