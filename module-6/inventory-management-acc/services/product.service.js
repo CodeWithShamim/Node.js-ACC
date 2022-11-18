@@ -1,5 +1,6 @@
 const Product = require("../models/product.model");
 
+// get all products 
 module.exports.getProductService = async () => {
     // const products = await Product.find({_id:"63761e21af65ea0c70ba3eb8"});
     // const products = await Product.find({status:"in-stock"});
@@ -23,6 +24,7 @@ module.exports.getProductService = async () => {
     return products;
 }
 
+// post a new product 
 module.exports.createProductService = async (data) => {
     const product = new Product(data);
     product.logger()
@@ -31,7 +33,8 @@ module.exports.createProductService = async (data) => {
     return result;
 }
 
-module.exports.updateProductService = async (productId, data) => {
+// update a product 
+module.exports.updateProductByIdService = async (productId, data) => {
     // step-1 =>
     // const product = await Product.findById(productId);
     // const result = await product.set(data).save();
@@ -42,6 +45,7 @@ module.exports.updateProductService = async (productId, data) => {
     return result;
 }
 
+// update multiple products 
 module.exports.bulkUpdateProductService = async (data) => {
     /*
         // json data for this update 
@@ -84,5 +88,11 @@ module.exports.bulkUpdateProductService = async (data) => {
         products.push(Product.updateOne({ _id: product.id }, product.data))
     });
     const result = await Promise.all(products)
+    return result;
+}
+
+// delete a product 
+module.exports.deleteProductByIdService = async (productId) => {
+    const result = await Product.deleteOne({ _id: productId })
     return result;
 }

@@ -41,7 +41,7 @@ module.exports.updateProductById = async (req, res) => {
     try {
         const id = req.params.id;
         const data = req.body;
-        const result = await productService.updateProductService(id, data);
+        const result = await productService.updateProductByIdService(id, data);
         res.status(200).json({
             success: true,
             message: "product update successfully.",
@@ -70,6 +70,25 @@ module.exports.bulkUpdateProduct = async (req, res) => {
         res.status(400).json({
             success: false,
             message: "data update failed.",
+            error: error.message
+        })
+    }
+}
+
+// delete product 
+module.exports.deleteProductById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const result = await productService.deleteProductByIdService(id);
+        res.status(200).json({
+            success: true,
+            message: "Product delete successfully.",
+            data: result
+        })
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: "Product delete failed.",
             error: error.message
         })
     }
