@@ -30,3 +30,14 @@ module.exports.createProductService = async (data) => {
     // const result = await Product.create(data);
     return result;
 }
+
+module.exports.updateProductService = async (productId, data) => {
+    // step-1 =>
+    // const product = await Product.findById(productId);
+    // const result = await product.set(data).save();
+
+    // step-2 => 
+    // const result = await Product.updateOne({ _id: productId }, { $inc: { price: 100 } }, { runValidators: true })
+    const result = await Product.updateOne({ _id: productId }, { $set: data }, { runValidators: true })
+    return result;
+}
