@@ -3,7 +3,11 @@ const productService = require("../services/product.service")
 // get product 
 module.exports.getProduct = async (req, res) => {
     try {
-        const products = await productService.getProductService();
+        const filters = {...req.query};
+        const excludeFields = ["page", "limit", "sort"]
+        excludeFields.forEach(field=> delete filters[field]);
+
+        const products = await productService.getProductService(filters);
         res.status(200).json({
             success: true,
             data: products

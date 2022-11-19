@@ -1,7 +1,7 @@
 const Product = require("../models/product.model");
 
 // get all products 
-module.exports.getProductService = async () => {
+module.exports.getProductService = async (filters) => {
     // const products = await Product.find({_id:"63761e21af65ea0c70ba3eb8"});
     // const products = await Product.find({status:"in-stock"});
     // const products = await Product.find({ $or: [{ _id: "63761e21af65ea0c70ba3eb8" }, { name: "dkjsdl" }] });
@@ -20,7 +20,7 @@ module.exports.getProductService = async () => {
     //     .where("price").gt(1).lt(100)
     //     .limit(2).sort({ quantity: 1 })
 
-    const products = await Product.find({});
+    const products = await Product.find(filters);
     return products;
 }
 
@@ -99,6 +99,7 @@ module.exports.deleteProductByIdService = async (productId) => {
 
 // bulk delete product 
 module.exports.bulkDeleteProductService = async (productIds) => {
+    // const result = await Product.deleteMany({}) // delete all data from db
     const result = await Product.deleteMany({ _id: productIds })
     return result;
 }
