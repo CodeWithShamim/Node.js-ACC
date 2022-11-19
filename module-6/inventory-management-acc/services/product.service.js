@@ -23,8 +23,13 @@ module.exports.getProductService = async (filters, queries) => {
     const products = await Product.find(filters)
         .select(queries.fields)
         .sort(queries.sortBy)// sort("name price")
+        .skip(queries.skip)
+        .limit(queries.limit)
 
-    return products;
+    const totalProducts = await Product.countDocuments(filters);
+    const totalPages = Math.ceil(totalProducts / queries.limit)
+
+    return { totalProducts, totalPages, products };
 }
 
 // post a new product 
