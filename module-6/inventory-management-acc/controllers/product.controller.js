@@ -4,10 +4,19 @@ const productService = require("../services/product.service")
 module.exports.getProduct = async (req, res) => {
     // http://localhost:5000/api/v1/product?status=out-of-stock&page=1&limit=5&sort=price,name&fields=name,-_id //acending sort
     // http://localhost:5000/api/v1/product?status=out-of-stock&page=1&limit=5&sort=-price,-name&fields=name,-_id //decending sort
+
+    // http://localhost:5000/api/v1/product?price[gt]=20
+
     try {
-        const filters = { ...req.query };
+        let filters = { ...req.query };
         const excludeFields = ["page", "limit", "sort", "fields"]
         excludeFields.forEach(field => delete filters[field]);
+
+        // filter by operator
+        // http://localhost:5000/api/v1/product?price[gt]=20
+        let filtersStringify = JSON.stringify(filters);
+        filtersStringify = filtersStringify.replace(/\b(lt|lte|gt|gte|ne)\b/g, matching => `$${matching}`);
+        filters = JSON.parse(filtersStringify);
 
         const queries = {}
         // for sort 
