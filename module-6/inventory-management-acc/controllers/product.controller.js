@@ -2,12 +2,26 @@ const productService = require("../services/product.service")
 
 // get product 
 module.exports.getProduct = async (req, res) => {
+    // http://localhost:5000/api/v1/product?status=out-of-stock&page=1&limit=5&sort=price,name&fields=name,-_id //acending sort
+    // http://localhost:5000/api/v1/product?status=out-of-stock&page=1&limit=5&sort=-price,-name&fields=name,-_id //decending sort
     try {
-        const filters = {...req.query};
-        const excludeFields = ["page", "limit", "sort"]
-        excludeFields.forEach(field=> delete filters[field]);
+        const filters = { ...req.query };
+        const excludeFields = ["page", "limit", "sort", "fields"]
+        excludeFields.forEach(field => delete filters[field]);
 
-        const products = await productService.getProductService(filters);
+        const queries = {}
+        // for sort 
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(",").join(" ");
+            queries.sortBy = sortBy;
+        }
+        // for fields 
+        if (req.query.sort) {
+            const fields = req.query.fields.split(",").join(" ");
+            queries.fields = fields;
+        }
+
+        const products = await productService.getProductService(filters, queries);
         res.status(200).json({
             success: true,
             data: products

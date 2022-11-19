@@ -1,7 +1,7 @@
 const Product = require("../models/product.model");
 
 // get all products 
-module.exports.getProductService = async (filters) => {
+module.exports.getProductService = async (filters, queries) => {
     // const products = await Product.find({_id:"63761e21af65ea0c70ba3eb8"});
     // const products = await Product.find({status:"in-stock"});
     // const products = await Product.find({ $or: [{ _id: "63761e21af65ea0c70ba3eb8" }, { name: "dkjsdl" }] });
@@ -20,7 +20,10 @@ module.exports.getProductService = async (filters) => {
     //     .where("price").gt(1).lt(100)
     //     .limit(2).sort({ quantity: 1 })
 
-    const products = await Product.find(filters);
+    const products = await Product.find(filters)
+        .select(queries.fields)
+        .sort(queries.sortBy)// sort("name price")
+
     return products;
 }
 
