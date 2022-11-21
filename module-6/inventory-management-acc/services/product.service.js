@@ -1,4 +1,5 @@
-const Product = require("../models/product.model");
+const Product = require("../models/Product");
+
 
 // get all products 
 module.exports.getProductService = async (filters, queries) => {
